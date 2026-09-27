@@ -1,0 +1,164 @@
+---
+/**
+ * Bannière de consentement aux cookies de mesure d'audience.
+ * Elle ne s'affiche que si un outil d'analytics est configuré
+ * (PUBLIC_GA_MEASUREMENT_ID) et tant qu'aucun choix n'a été fait.
+ * « Refuser » est aussi simple et visible qu'« Accepter » (recommandations CNIL).
+ */
+---
+
+<section
+  class="consent"
+  aria-labelledby="consent-title"
+  data-consent
+  hidden
+>
+  <div class="consent__inner">
+    <div class="consent__text">
+      <h2 id="consent-title" class="consent__title">Votre vie privée</h2>
+      <p data-consent-message>
+        Avec votre accord, nous utilisons des cookies de mesure d’audience (Google Analytics) pour
+        comprendre comment le site est consulté et l’améliorer. Vous pouvez changer d’avis à tout moment
+        via «&nbsp;Gestion des cookies&nbsp;» en bas de page.{' '}
+        <a href="/politique-de-confidentialite#cookies">En savoir plus</a>
+      </p>
+    </div>
+    <div class="consent__actions" data-consent-actions>
+      <button type="button" class="btn btn--sm btn--outline" data-consent-choice="denied">Refuser</button>
+      <button type="button" class="btn btn--sm btn--outline" data-consent-choice="granted">Accepter</button>
+    </div>
+    <button type="button" class="consent__close" data-consent-close hidden aria-label="Fermer">×</button>
+  </div>
+</section>
+
+<style>
+  .consent {
+    position: fixed;
+    left: 50%;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 70;
+    width: min(100% - 2rem, 58rem);
+    transform: translateX(-50%);
+    animation: consent-in 0.7s var(--ease-out) both;
+  }
+
+  .consent[hidden] {
+    display: none;
+  }
+
+  .consent__inner {
+    position: relative;
+    display: grid;
+    gap: 1.1rem;
+    padding: 1.4rem 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--ivory);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 30px 60px -30px rgb(58 42 37 / 0.45);
+  }
+
+  .consent__title {
+    font-size: 1.45rem;
+  }
+
+  .consent__text p {
+    margin-top: 0.4rem;
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--taupe-ink);
+  }
+
+  .consent__text a {
+    color: var(--bordeaux);
+  }
+
+  .consent__actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .consent__actions .btn {
+    flex: 1;
+  }
+
+  .consent__close {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.8rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--taupe-ink);
+    cursor: pointer;
+  }
+
+  @keyframes consent-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 20px);
+    }
+  }
+
+  @media (min-width: 760px) {
+    .consent__inner {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.5rem 2rem;
+    }
+
+    .consent__actions .btn {
+      flex: none;
+      min-width: 8.5rem;
+    }
+  }
+</style>
+
+<script>
+  import { analyticsEnabled, readConsent, saveConsent, loadAnalytics } from '../lib/analytics';
+
+  const banner = document.querySelector<HTMLElement>('[data-consent]');
+  const message = banner?.querySelector<HTMLElement>('[data-consent-message]');
+  const actions = banner?.querySelector<HTMLElement>('[data-consent-actions]');
+  const closeBtn = banner?.querySelector<HTMLButtonElement>('[data-consent-close]');
+
+  const consent = readConsent();
+
+  if (analyticsEnabled) {
+    if (consent === 'granted') loadAnalytics();
+    if (!consent && banner) banner.hidden = false;
+  }
+
+  banner?.querySelectorAll<HTMLButtonElement>('[data-consent-choice]').forEach((button) => {
+    button.addEventListener('click', () => {
+      saveConsent(button.dataset.consentChoice as 'granted' | 'denied');
+      banner.hidden = true;
+    });
+  });
+
+  closeBtn?.addEventListener('click', () => {
+    if (banner) banner.hidden = true;
+  });
+
+  // Lien « Gestion des cookies » du pied de page : rouvre la bannière
+  document.querySelectorAll<HTMLElement>('[data-open-consent]').forEach((trigger) => {
+    trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (!banner) return;
+      if (!analyticsEnabled && message && actions && closeBtn) {
+        message.textContent =
+          'Ce site n’utilise actuellement aucun cookie de mesure d’audience ni de publicité. Seules des données strictement nécessaires à son fonctionnement peuvent être enregistrées dans votre navigateur.';
+        actions.hidden = true;
+        closeBtn.hidden = false;
+      }
+      banner.hidden = false;
+      banner.querySelector<HTMLElement>('button:not([hidden])')?.focus();
+    });
+  });
+</script>

@@ -1,0 +1,107 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookingButton from '../components/BookingButton.astro';
+import detail from '../assets/photos/detail-baby-boomer.jpg';
+---
+
+<BaseLayout
+  title="Page introuvable — Maison Malki Neuilly"
+  description="Cette page n’existe pas ou a été déplacée. Retrouvez l’institut Maison Malki Neuilly, à Neuilly-sur-Seine."
+  noindex
+>
+  <section class="notfound">
+    <div class="container notfound__grid">
+      <div>
+        <p class="eyebrow">Erreur 404</p>
+        <h1>Cette page s’est <em>éclipsée</em></h1>
+        <p class="lead">
+          La page que vous cherchez n’existe pas ou a été déplacée. Revenez à l’accueil pour découvrir
+          l’institut et nos prestations.
+        </p>
+        <div class="notfound__actions">
+          <BookingButton location="404" />
+          <a class="link-arrow" href="/">Retour à l’accueil</a>
+        </div>
+        <ul class="notfound__links">
+          <li><a href="/#prestations">Prestations</a></li>
+          <li><a href="/#realisations">Réalisations</a></li>
+          <li><a href="/#infos">Infos pratiques</a></li>
+        </ul>
+      </div>
+      <div class="notfound__visual media">
+        <Picture
+          src={detail}
+          alt="Ongles amande en dégradé baby boomer"
+          widths={[360, 540, 800]}
+          sizes="(min-width: 900px) 34vw, 80vw"
+          formats={['avif', 'webp']}
+          loading="eager"
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding: calc(var(--header-h) + 3rem) 0 5rem;
+    background: var(--cream);
+    background-image: radial-gradient(70% 60% at 100% 0%, var(--powder) 0%, transparent 70%);
+  }
+
+  .notfound__grid {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .notfound h1 {
+    font-size: var(--step-5);
+  }
+
+  .notfound .lead {
+    max-width: 30rem;
+    margin-top: 1.6rem;
+  }
+
+  .notfound__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.2rem 2rem;
+    margin-top: 2.4rem;
+  }
+
+  .notfound__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.6rem;
+    margin: 2.6rem 0 0;
+    padding: 1.4rem 0 0;
+    border-top: 1px solid var(--line);
+    list-style: none;
+    font-size: var(--step--1);
+  }
+
+  .notfound__links a {
+    color: var(--taupe-ink);
+  }
+
+  .notfound__visual {
+    width: min(100%, 26rem);
+    aspect-ratio: 4 / 5;
+    margin-inline: auto;
+    border-radius: 999px 999px var(--radius-lg) var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+  }
+
+  @media (min-width: 900px) {
+    .notfound__grid {
+      grid-template-columns: 1.2fr 0.8fr;
+    }
+  }
+</style>

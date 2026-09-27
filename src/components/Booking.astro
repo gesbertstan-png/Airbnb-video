@@ -1,0 +1,608 @@
+---
+import BookingButton from './BookingButton.astro';
+import Icon from './Icon.astro';
+import { site, links } from '../config/site';
+import { SERVICE_OPTIONS, FIELD_LIMITS } from '../lib/validation';
+---
+
+<section class="booking section" id="rendez-vous" aria-labelledby="rendez-vous-title" data-booking-section>
+  <div class="container booking__grid">
+    <div class="booking__intro">
+      <p class="eyebrow" data-reveal>Rendez-vous</p>
+      <h2 id="rendez-vous-title" class="section-title" data-reveal data-delay="1">
+        Prendre <em>rendez-vous</em>
+      </h2>
+      <p class="lead booking__lead" data-reveal data-delay="2">
+        Appelez directement l’institut, ou laissez-nous votre demande&nbsp;: nous vous recontactons pour
+        convenir ensemble du créneau qui vous convient.
+      </p>
+
+      <div class="booking__channels" data-reveal data-delay="3">
+        <a class="channel" href={site.phone.href} data-cta="phone">
+          <span class="channel__icon"><Icon name="phone" /></span>
+          <span class="channel__body">
+            <span class="channel__label">Par téléphone</span>
+            <span class="channel__value">{site.phone.display}</span>
+          </span>
+        </a>
+
+        {links.bookingIsExternal && (
+          <div class="channel channel--online">
+            <span class="channel__icon"><Icon name="calendar" /></span>
+            <span class="channel__body">
+              <span class="channel__label">En ligne</span>
+              <BookingButton size="sm" label="Réserver en ligne" location="booking-section" />
+            </span>
+          </div>
+        )}
+
+        <p class="booking__address">
+          <Icon name="pin" />
+          <span>{links.fullAddress}</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="booking__card" data-reveal="scale" data-delay="1">
+      <form
+        class="form"
+        method="post"
+        action="/api/rendez-vous"
+        novalidate
+        data-booking-form
+        data-phone-href={site.phone.href}
+        data-phone-display={site.phone.display}
+        aria-describedby="form-intro"
+      >
+        <h3 class="form__title">Demande de rendez-vous</h3>
+        <p class="form__intro" id="form-intro">
+          Les champs marqués d’un <span aria-hidden="true">*</span><span class="visually-hidden">astérisque</span> sont obligatoires.
+        </p>
+
+        <div class="form__grid">
+          <div class="field">
+            <label for="bk-name">Nom et prénom <span aria-hidden="true">*</span></label>
+            <input
+              id="bk-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+              minlength={FIELD_LIMITS.name.min}
+              maxlength={FIELD_LIMITS.name.max}
+              aria-describedby="bk-name-error"
+            />
+            <p class="field__error" id="bk-name-error" data-error-for="name"></p>
+          </div>
+
+          <div class="field">
+            <label for="bk-phone">Téléphone <span aria-hidden="true">*</span></label>
+            <input
+              id="bk-phone"
+              name="phone"
+              type="tel"
+              autocomplete="tel"
+              inputmode="tel"
+              required
+              maxlength="25"
+              aria-describedby="bk-phone-error"
+            />
+            <p class="field__error" id="bk-phone-error" data-error-for="phone"></p>
+          </div>
+
+          <div class="field">
+            <label for="bk-email">E-mail <span class="field__optional">(facultatif)</span></label>
+            <input
+              id="bk-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              maxlength={FIELD_LIMITS.email.max}
+              aria-describedby="bk-email-error"
+            />
+            <p class="field__error" id="bk-email-error" data-error-for="email"></p>
+          </div>
+
+          <div class="field">
+            <label for="bk-service">Prestation souhaitée</label>
+            <div class="field__select">
+              <select id="bk-service" name="service" aria-describedby="bk-service-error">
+                <option value="">Choisir une prestation</option>
+                {SERVICE_OPTIONS.map((option) => <option value={option.value}>{option.label}</option>)}
+              </select>
+            </div>
+            <p class="field__error" id="bk-service-error" data-error-for="service"></p>
+          </div>
+
+          <div class="field field--full">
+            <label for="bk-availability">Vos disponibilités <span class="field__optional">(facultatif)</span></label>
+            <input
+              id="bk-availability"
+              name="availability"
+              type="text"
+              maxlength={FIELD_LIMITS.availability.max}
+              placeholder="Ex. mardi après-midi, samedi matin…"
+              aria-describedby="bk-availability-error"
+            />
+            <p class="field__error" id="bk-availability-error" data-error-for="availability"></p>
+          </div>
+
+          <div class="field field--full">
+            <label for="bk-message">Message <span class="field__optional">(facultatif)</span></label>
+            <textarea
+              id="bk-message"
+              name="message"
+              rows="4"
+              maxlength={FIELD_LIMITS.message.max}
+              aria-describedby="bk-message-error"></textarea>
+            <p class="field__error" id="bk-message-error" data-error-for="message"></p>
+          </div>
+
+          <!-- Anti-spam : champ piège invisible pour les humains, et horodatage rempli par JavaScript -->
+          <div class="field--trap" aria-hidden="true">
+            <label for="bk-website">Ne pas remplir ce champ</label>
+            <input id="bk-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+          <input type="hidden" name="startedAt" value="" data-started-at />
+
+          <div class="field field--full field--checkbox">
+            <input id="bk-consent" name="consent" type="checkbox" required aria-describedby="bk-consent-error" />
+            <label for="bk-consent">
+              J’accepte que les informations saisies soient utilisées par Maison Malki Neuilly pour traiter ma
+              demande de rendez-vous. <a href="/politique-de-confidentialite">En savoir plus</a>
+              <span aria-hidden="true">*</span>
+            </label>
+            <p class="field__error" id="bk-consent-error" data-error-for="consent"></p>
+          </div>
+        </div>
+
+        <div class="form__footer">
+          <button class="btn form__submit" type="submit" data-submit>
+            <span data-submit-label>Envoyer ma demande</span>
+            <Icon name="arrow" class="btn__icon" />
+          </button>
+          <p class="form__note">Votre rendez-vous sera confirmé lors de notre prise de contact.</p>
+        </div>
+
+        <div class="form__status" role="status" aria-live="polite" tabindex="-1" data-form-status></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .booking {
+    background: var(--cream);
+    background-image: radial-gradient(70% 50% at 0% 0%, var(--powder) 0%, transparent 70%);
+  }
+
+  .booking__grid {
+    display: grid;
+    gap: clamp(3rem, 2rem + 4vw, 5.5rem);
+    align-items: start;
+  }
+
+  .booking__lead {
+    margin-top: 1.8rem;
+    max-width: 30rem;
+  }
+
+  .booking__channels {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2.4rem;
+  }
+
+  .channel {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ivory);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      border-color 0.45s var(--ease),
+      transform 0.45s var(--ease),
+      box-shadow 0.45s var(--ease);
+  }
+
+  a.channel:hover {
+    border-color: var(--rose);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+  }
+
+  .channel__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--powder);
+    color: var(--bordeaux);
+  }
+
+  .channel__icon :global(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .channel__body {
+    display: grid;
+    gap: 0.25rem;
+    justify-items: start;
+  }
+
+  .channel__label {
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--taupe-ink);
+  }
+
+  .channel__value {
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 1.4rem + 1.2vw, 2.2rem);
+    line-height: 1.05;
+    white-space: nowrap;
+  }
+
+  .booking__address {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.4rem;
+    font-size: var(--step--1);
+    color: var(--taupe-ink);
+  }
+
+  .booking__address :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex: none;
+    color: var(--rose-ink);
+  }
+
+  /* Carte formulaire */
+  .booking__card {
+    padding: clamp(1.5rem, 1rem + 2.5vw, 3rem);
+    border-radius: var(--radius-lg);
+    background: var(--ivory);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .form__title {
+    font-size: var(--step-2);
+  }
+
+  .form__intro {
+    margin-top: 0.5rem;
+    font-size: var(--step--1);
+    color: var(--taupe-ink);
+  }
+
+  .form__grid {
+    display: grid;
+    gap: 1.25rem 1.25rem;
+    margin-top: 1.8rem;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.45rem;
+    align-content: start;
+  }
+
+  .field label {
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .field__optional {
+    font-weight: 400;
+    color: var(--taupe-ink);
+  }
+
+  .field input:not([type='checkbox']),
+  .field select,
+  .field textarea {
+    width: 100%;
+    min-height: 3.1rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    background: var(--cream);
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--ink);
+    transition:
+      border-color 0.3s var(--ease),
+      background-color 0.3s var(--ease),
+      box-shadow 0.3s var(--ease);
+    appearance: none;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 7.5rem;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: #7b6a62;
+  }
+
+  .field input:hover,
+  .field select:hover,
+  .field textarea:hover {
+    border-color: var(--taupe);
+  }
+
+  .field input:focus-visible,
+  .field select:focus-visible,
+  .field textarea:focus-visible {
+    outline: none;
+    border-color: var(--bordeaux);
+    background: var(--ivory);
+    box-shadow: 0 0 0 3px rgb(107 45 56 / 0.14);
+  }
+
+  .field [aria-invalid='true'] {
+    border-color: #a3343f !important;
+    background: #fdf5f4 !important;
+  }
+
+  .field__select {
+    position: relative;
+  }
+
+  .field__select::after {
+    content: '';
+    position: absolute;
+    right: 1.1rem;
+    top: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  .field__select select {
+    padding-right: 2.6rem;
+    cursor: pointer;
+  }
+
+  .field__error {
+    min-height: 0;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: #9c2f3a;
+  }
+
+  .field__error:empty {
+    display: none;
+  }
+
+  .field--checkbox {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 0.4rem 0.8rem;
+  }
+
+  .field--checkbox input {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0.15rem 0 0;
+    accent-color: var(--bordeaux);
+    cursor: pointer;
+  }
+
+  .field--checkbox label {
+    font-weight: 400;
+    font-size: var(--step--1);
+    line-height: 1.55;
+    color: var(--taupe-ink);
+  }
+
+  .field--checkbox label a {
+    color: var(--bordeaux);
+  }
+
+  .field--checkbox .field__error {
+    grid-column: 2;
+  }
+
+  .field--trap {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 1.8rem;
+  }
+
+  .form__submit[aria-busy='true'] {
+    opacity: 0.75;
+    cursor: progress;
+  }
+
+  .form__note {
+    flex: 1 1 14rem;
+    font-size: 0.82rem;
+    color: var(--taupe-ink);
+  }
+
+  .form__status {
+    margin-top: 1.2rem;
+    border-radius: 12px;
+    font-size: var(--step--1);
+    outline: none;
+  }
+
+  .form__status:empty {
+    display: none;
+  }
+
+  .form__status[data-state='success'] {
+    padding: 1rem 1.2rem;
+    background: #eef3ea;
+    color: #2f4a2a;
+  }
+
+  .form__status[data-state='error'] {
+    padding: 1rem 1.2rem;
+    background: #fbeeed;
+    color: #862a33;
+  }
+
+  .form__status a {
+    color: inherit;
+    font-weight: 500;
+  }
+
+  @media (min-width: 640px) {
+    .form__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field--full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .booking__grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    }
+
+    .booking__intro {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+    }
+  }
+</style>
+
+<script>
+  import { normalizeBooking, validateBooking, validateField, type BookingField } from '../lib/validation';
+  import { trackEvent } from '../lib/analytics';
+
+  const form = document.querySelector<HTMLFormElement>('[data-booking-form]');
+
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-form-status]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const submitLabel = form.querySelector<HTMLElement>('[data-submit-label]')!;
+    const startedAt = form.querySelector<HTMLInputElement>('[data-started-at]')!;
+    startedAt.value = String(Date.now());
+
+    const escapeHtml = (value: string) =>
+      value.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const phoneLink = `<a href="${form.dataset.phoneHref}">${escapeHtml(form.dataset.phoneDisplay ?? '')}</a>`;
+
+    const read = () => normalizeBooking(Object.fromEntries(new FormData(form)) as Record<string, unknown>);
+
+    const fieldEl = (name: string) =>
+      form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null;
+
+    function showError(field: string, message?: string) {
+      const input = fieldEl(field);
+      const slot = form!.querySelector<HTMLElement>(`[data-error-for="${field}"]`);
+      if (slot) slot.textContent = message ?? '';
+      if (input) input.setAttribute('aria-invalid', message ? 'true' : 'false');
+    }
+
+    function setStatus(state: 'success' | 'error' | '', html: string) {
+      status.dataset.state = state;
+      status.innerHTML = html;
+      if (html) status.focus({ preventScroll: false });
+    }
+
+    // Validation au fil de la saisie, uniquement après une première interaction
+    form.addEventListener('focusout', (event) => {
+      const target = event.target as HTMLInputElement;
+      if (!target.name || target.name === 'website') return;
+      if (!target.value && target.type !== 'checkbox') return;
+      showError(target.name, validateField(target.name as BookingField, read()));
+    });
+
+    form.addEventListener('input', (event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.getAttribute('aria-invalid') === 'true') {
+        showError(target.name, validateField(target.name as BookingField, read()));
+      }
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      setStatus('', '');
+
+      const data = read();
+      const errors = validateBooking(data);
+      (['name', 'phone', 'email', 'service', 'availability', 'message', 'consent'] as const).forEach((f) =>
+        showError(f, errors[f]),
+      );
+
+      const firstInvalid = Object.keys(errors)[0];
+      if (firstInvalid) {
+        fieldEl(firstInvalid)?.focus();
+        return;
+      }
+
+      submit.setAttribute('aria-busy', 'true');
+      submit.disabled = true;
+      submitLabel.textContent = 'Envoi en cours…';
+
+      try {
+        const payload = Object.fromEntries(new FormData(form));
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (response.ok && result.ok) {
+          form.reset();
+          startedAt.value = String(Date.now());
+          setStatus(
+            'success',
+            'Merci&nbsp;! Votre demande a bien été envoyée. Nous vous recontactons très vite pour confirmer votre rendez-vous.',
+          );
+          trackEvent('generate_lead', { form: 'rendez-vous' });
+        } else {
+          if (result.errors) {
+            Object.entries(result.errors as Record<string, string>).forEach(([f, m]) => showError(f, m));
+          }
+          setStatus(
+            'error',
+            `${escapeHtml(result.message ?? 'Votre demande n’a pas pu être envoyée.')} Vous pouvez aussi nous appeler au ${phoneLink}.`,
+          );
+        }
+      } catch {
+        setStatus(
+          'error',
+          `La connexion semble interrompue. Réessayez dans un instant ou appelez-nous au ${phoneLink}.`,
+        );
+      } finally {
+        submit.removeAttribute('aria-busy');
+        submit.disabled = false;
+        submitLabel.textContent = 'Envoyer ma demande';
+      }
+    });
+  }
+</script>

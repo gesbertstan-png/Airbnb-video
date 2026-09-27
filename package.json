@@ -1,0 +1,32 @@
+{
+  "name": "maison-malki-neuilly",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site internet de Maison Malki Neuilly — institut de beauté et salon d'ongles à Neuilly-sur-Seine.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "start": "node ./server.mjs",
+    "preview": "npm run build && npm start",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.6",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/jost": "^5.3.0",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "astro": "^7.3.5",
+    "compression": "^1.8.2",
+    "nodemailer": "^10.0.11",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/nodemailer": "^8.0.2",
+    "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

@@ -1,0 +1,48 @@
+---
+/**
+ * L'unique appel à l'action du site : « Prendre rendez-vous ».
+ * Pointe vers le lien de réservation en ligne s'il est configuré
+ * (src/config/site.ts), sinon vers la section rendez-vous.
+ */
+import Icon from './Icon.astro';
+import { links } from '../config/site';
+
+interface Props {
+  size?: 'sm' | 'md';
+  variant?: 'primary' | 'light';
+  label?: string;
+  /** Sur petit écran, n'affiche que la fin du libellé (« Rendez-vous ») */
+  compact?: boolean;
+  class?: string;
+  /** Emplacement du bouton, transmis à l'outil d'analytics */
+  location?: string;
+}
+
+const {
+  size = 'md',
+  variant = 'primary',
+  label = 'Prendre rendez-vous',
+  compact = false,
+  class: className,
+  location,
+} = Astro.props;
+const external = links.bookingIsExternal;
+// Libellé compact : « Prendre » est masqué sur mobile, le nom accessible reste le texte visible.
+const [prefix, ...rest] = label.split(' ');
+---
+
+<a
+  href={links.booking}
+  class:list={['btn', size === 'sm' && 'btn--sm', variant === 'light' && 'btn--light', className]}
+  data-cta="booking"
+  data-cta-location={location}
+  {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+>
+  {compact ? (
+    <span><span class="btn__label-prefix">{prefix} </span>{rest.join(' ')}</span>
+  ) : (
+    <span>{label}</span>
+  )}
+  <Icon name={external ? 'arrow-up-right' : 'arrow'} class:list={['btn__icon', compact && 'btn__icon--compact']} />
+  {external && <span class="visually-hidden">(nouvel onglet)</span>}
+</a>

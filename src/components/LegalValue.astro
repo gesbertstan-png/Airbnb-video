@@ -1,0 +1,13 @@
+---
+/** Affiche une information légale, ou la signale clairement si elle reste à compléter. */
+import { TO_COMPLETE } from '../config/site';
+
+interface Props {
+  value?: string;
+}
+
+const { value } = Astro.props;
+const missing = !value || value === TO_COMPLETE;
+---
+
+{missing ? <span class="to-complete">[À compléter]</span> : <Fragment>{value}</Fragment>}

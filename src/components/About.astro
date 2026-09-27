@@ -1,0 +1,157 @@
+---
+import { Picture } from 'astro:assets';
+import { site } from '../config/site';
+import institut from '../assets/photos/institut-maison-malki.jpg';
+import comptoir from '../assets/photos/detail-comptoir-fleurs.jpg';
+---
+
+<section class="about section" id="maison" aria-labelledby="maison-title">
+  <div class="container about__grid">
+    <div class="about__visual">
+      <div class="about__main media" data-reveal="scale">
+        <Picture
+          src={institut}
+          alt="Intérieur de l’institut Maison Malki Neuilly : murs ivoire, étagères lumineuses de vernis, fauteuils blancs et bouquets de fleurs"
+          widths={[480, 720, 960, 1179]}
+          sizes="(min-width: 1260px) 690px, (min-width: 1000px) 52vw, 92vw"
+          formats={['avif', 'webp']}
+          quality={80}
+        />
+      </div>
+      <div class="about__detail media" data-reveal data-delay="2">
+        <Picture
+          src={comptoir}
+          alt="Le comptoir d’accueil fleuri de roses blanches et d’hortensias bordeaux"
+          widths={[320, 480, 709]}
+          sizes="(min-width: 1260px) 290px, (min-width: 1000px) 22vw, 46vw"
+          formats={['avif', 'webp']}
+          quality={78}
+        />
+      </div>
+    </div>
+
+    <div class="about__content">
+      <p class="eyebrow" data-reveal>La Maison</p>
+      <h2 id="maison-title" class="section-title" data-reveal data-delay="1">
+        Un écrin lumineux, <em>rue de Chartres</em>
+      </h2>
+      <p class="lead about__lead" data-reveal data-delay="2">
+        Maison Malki Neuilly a été pensée comme une parenthèse&nbsp;: des murs clairs, une lumière douce, des
+        étagères illuminées où s’alignent les vernis et des fleurs fraîches pour vous accueillir.
+      </p>
+      <p class="about__text" data-reveal data-delay="3">
+        Au cœur de notre savoir-faire&nbsp;: la beauté des ongles — manucure russe, baby boomer, pose couleur —
+        et l’électrolyse, la prestation la plus citée par nos clientes. Des gestes précis, un travail
+        minutieux et une attention sincère portée à chacune.
+      </p>
+
+      <dl class="about__facts" data-reveal data-delay="4">
+        <div>
+          <dt>Note Google</dt>
+          <dd><span class="about__figure">{site.googleRating.display}</span>/5 · {site.googleRating.count} avis</dd>
+        </div>
+        <div>
+          <dt>Savoir-faire</dt>
+          <dd>Ongles & électrolyse</dd>
+        </div>
+        <div>
+          <dt>Adresse</dt>
+          <dd>{site.address.street}, {site.address.city}</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    background: var(--ivory);
+  }
+
+  .about__grid {
+    display: grid;
+    gap: clamp(3rem, 2rem + 4vw, 6rem);
+    align-items: center;
+  }
+
+  .about__visual {
+    position: relative;
+    padding-bottom: 18%;
+  }
+
+  .about__main {
+    aspect-ratio: 1179 / 757;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .about__detail {
+    position: absolute;
+    right: -4%;
+    bottom: 0;
+    width: 48%;
+    aspect-ratio: 4 / 3;
+    border: 6px solid var(--ivory);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+  }
+
+  .about__detail :global(img) {
+    object-position: 35% 50%;
+  }
+
+  .about__lead {
+    margin-top: 1.8rem;
+  }
+
+  .about__text {
+    margin-top: 1.2rem;
+    color: var(--taupe-ink);
+  }
+
+  .about__facts {
+    display: grid;
+    margin: 2.6rem 0 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .about__facts > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .about__facts dt {
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rose-ink);
+  }
+
+  .about__facts dd {
+    margin: 0;
+    text-align: right;
+    color: var(--ink);
+  }
+
+  .about__figure {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  @media (min-width: 1000px) {
+    .about__grid {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    }
+
+    .about__detail {
+      right: -8%;
+      width: 42%;
+    }
+  }
+</style>

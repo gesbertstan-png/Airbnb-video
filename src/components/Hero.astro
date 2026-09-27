@@ -1,0 +1,292 @@
+---
+import { Picture } from 'astro:assets';
+import BookingButton from './BookingButton.astro';
+import Icon from './Icon.astro';
+import { site, links } from '../config/site';
+import babyBoomer from '../assets/photos/ongles-baby-boomer.jpg';
+import murDeVernis from '../assets/photos/detail-mur-de-vernis.jpg';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__glow" aria-hidden="true"></div>
+
+  <div class="container hero__grid">
+    <div class="hero__content">
+      <h1 id="hero-title" class="hero__title">
+        <span class="hero__kicker eyebrow" data-reveal>
+          {site.name} — institut de beauté & salon d’ongles
+        </span>
+        <span class="hero__headline" data-reveal data-delay="1">
+          Des ongles sublimés, <em>tout en douceur</em>
+        </span>
+      </h1>
+
+      <p class="hero__text lead" data-reveal data-delay="2">
+        Manucure russe, baby boomer, couleurs délicates et électrolyse&nbsp;: au 25 rue de Chartres,
+        à {site.address.city}, Maison Malki vous accueille dans un institut lumineux pour un moment de soin
+        précis et attentionné.
+      </p>
+
+      <div class="hero__actions" data-reveal data-delay="3">
+        <BookingButton location="hero" />
+        <p class="hero__phone">
+          ou par téléphone au <a href={site.phone.href}>{site.phone.display}</a>
+        </p>
+      </div>
+
+      <a
+        class="hero__rating"
+        href={links.googleMaps}
+        target="_blank"
+        rel="noopener"
+        data-reveal
+        data-delay="4"
+      >
+        <span class="hero__stars" aria-hidden="true">
+          {Array.from({ length: 5 }).map(() => <Icon name="star" />)}
+        </span>
+        <span><strong>{site.googleRating.display}</strong>/5 · {site.googleRating.count} avis Google</span>
+        <span class="visually-hidden">(nouvel onglet)</span>
+      </a>
+    </div>
+
+    <div class="hero__visual">
+      <div class="hero__arch media" data-reveal="scale">
+        <Picture
+          src={babyBoomer}
+          alt="Mains aux ongles amande en dégradé baby boomer, du rose nude au blanc lacté, réalisés chez Maison Malki"
+          widths={[420, 640, 860, 1100]}
+          sizes="(min-width: 1100px) 34vw, (min-width: 760px) 52vw, 86vw"
+          formats={['avif', 'webp']}
+          loading="eager"
+          fetchpriority="high"
+          quality={78}
+        />
+      </div>
+
+      <figure class="hero__inset" data-reveal data-delay="3">
+        <div class="media">
+          <Picture
+            src={murDeVernis}
+            alt="Le mur de l’institut, signé Maison Malki, et ses étagères lumineuses de vernis"
+            widths={[240, 360, 439]}
+            sizes="(min-width: 1100px) 15vw, 38vw"
+            formats={['avif', 'webp']}
+            loading="eager"
+            quality={78}
+          />
+        </div>
+        <figcaption>L’institut, rue de Chartres</figcaption>
+      </figure>
+
+      <svg class="hero__ornament" viewBox="0 0 200 200" aria-hidden="true">
+        <defs>
+          <path id="hero-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
+        </defs>
+        <text>
+          <textPath href="#hero-circle" textLength="486" lengthAdjust="spacing">Maison Malki · Neuilly-sur-Seine ·</textPath>
+        </text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-top: calc(var(--header-h) + clamp(2rem, 1rem + 4vw, 5rem));
+    padding-bottom: clamp(4rem, 2rem + 6vw, 8rem);
+    overflow: hidden;
+  }
+
+  .hero__glow {
+    position: absolute;
+    inset: -20% -30% auto auto;
+    width: min(1100px, 120vw);
+    aspect-ratio: 1;
+    background: radial-gradient(closest-side, var(--powder) 0%, rgb(244 228 222 / 0.5) 45%, transparent 72%);
+    pointer-events: none;
+  }
+
+  .hero__grid {
+    position: relative;
+    display: grid;
+    gap: clamp(3.5rem, 2rem + 5vw, 6rem);
+    align-items: center;
+  }
+
+  .hero__title {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .hero__kicker {
+    margin-bottom: 1.2rem;
+    line-height: 1.6;
+  }
+
+  .hero__headline {
+    display: block;
+    font-size: var(--step-5);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .hero__headline em {
+    display: inline-block;
+  }
+
+  .hero__text {
+    max-width: 34rem;
+    margin-top: clamp(1.5rem, 1rem + 1.5vw, 2.2rem);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.6rem;
+    margin-top: clamp(2rem, 1.5rem + 1.5vw, 2.8rem);
+  }
+
+  .hero__phone {
+    font-size: var(--step--1);
+    color: var(--taupe-ink);
+  }
+
+  .hero__phone a {
+    color: var(--ink);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .hero__rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2.4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--step--1);
+    color: var(--taupe-ink);
+    text-decoration: none;
+  }
+
+  .hero__rating strong {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .hero__stars {
+    display: inline-flex;
+    gap: 0.12rem;
+    color: var(--gold);
+  }
+
+  .hero__stars :global(svg) {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .hero__rating:hover {
+    color: var(--ink);
+  }
+
+  /* Visuel : arche + médaillon */
+  .hero__visual {
+    position: relative;
+    width: min(100%, 30rem);
+    margin-inline: auto;
+    padding-bottom: 2.5rem;
+  }
+
+  .hero__arch {
+    aspect-ratio: 4 / 5.3;
+    border-radius: 999px 999px var(--radius) var(--radius);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .hero__arch :global(img) {
+    object-position: 50% 58%;
+  }
+
+  .hero__inset {
+    position: absolute;
+    left: -6%;
+    bottom: 0;
+    width: 44%;
+    margin: 0;
+  }
+
+  .hero__inset .media {
+    aspect-ratio: 1;
+    border: 6px solid var(--ivory);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+  }
+
+  .hero__inset figcaption {
+    margin-top: 0.6rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--taupe-ink);
+  }
+
+  .hero__ornament {
+    position: absolute;
+    top: -2.2rem;
+    right: -2rem;
+    width: clamp(7rem, 5rem + 6vw, 9.5rem);
+    font-family: var(--font-body);
+    font-size: 13.2px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    fill: var(--rose-ink);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__ornament {
+      animation: spin 60s linear infinite;
+    }
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero__ornament {
+      right: -0.75rem;
+    }
+
+    .hero__inset {
+      left: -0.5rem;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .hero {
+      min-height: min(100svh, 980px);
+      display: flex;
+      align-items: center;
+    }
+
+    .hero__grid {
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+      width: min(100% - 2 * var(--gutter), var(--container));
+    }
+
+    .hero__visual {
+      width: min(100%, 31rem);
+      margin-inline: auto 0;
+    }
+
+    .hero__inset {
+      left: -18%;
+      width: 46%;
+    }
+  }
+</style>

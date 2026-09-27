@@ -1,0 +1,211 @@
+---
+import Icon from './Icon.astro';
+import { site, links } from '../config/site';
+
+const hoursComplete = site.openingHours.length > 0;
+---
+
+<section class="infos section" id="infos" aria-labelledby="infos-title">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow" data-reveal>Infos pratiques</p>
+      <h2 id="infos-title" class="section-title" data-reveal data-delay="1">
+        Nous trouver <em>à&nbsp;Neuilly-sur-Seine</em>
+      </h2>
+    </header>
+
+    <div class="infos__grid">
+      <article class="info" data-reveal>
+        <span class="info__icon"><Icon name="pin" /></span>
+        <h3 class="info__title">Adresse</h3>
+        <address class="info__text">
+          {site.name}<br />
+          {site.address.street}<br />
+          {site.address.postalCode} {site.address.city}
+        </address>
+        <a class="link-arrow" href={links.directions} target="_blank" rel="noopener">
+          Itinéraire <Icon name="arrow-up-right" class="info__arrow" />
+          <span class="visually-hidden">(Google Maps, nouvel onglet)</span>
+        </a>
+      </article>
+
+      <article class="info" data-reveal data-delay="1">
+        <span class="info__icon"><Icon name="clock" /></span>
+        <h3 class="info__title">Horaires</h3>
+        {hoursComplete ? (
+          <dl class="info__hours">
+            {site.openingHours.map((slot) => (
+              <div>
+                <dt>{slot.label}</dt>
+                <dd>{slot.opens.replace(':', 'h')} – {slot.closes.replace(':', 'h')}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : (
+          <>
+            <dl class="info__hours">
+              {site.openingHoursKnown.map((slot) => (
+                <div>
+                  <dt>{slot.label}</dt>
+                  <dd>{slot.value}</dd>
+                </div>
+              ))}
+            </dl>
+            <p class="info__note">Pour les autres jours, renseignez-vous par téléphone.</p>
+          </>
+        )}
+      </article>
+
+      <article class="info" data-reveal data-delay="2">
+        <span class="info__icon"><Icon name="phone" /></span>
+        <h3 class="info__title">Téléphone</h3>
+        <p class="info__text">
+          <a class="info__phone" href={site.phone.href}>{site.phone.display}</a>
+        </p>
+        <p class="info__note">Prise de rendez-vous et renseignements.</p>
+      </article>
+
+      <article class="info" data-reveal data-delay="3">
+        <span class="info__icon"><Icon name="calendar" /></span>
+        <h3 class="info__title">Réservation</h3>
+        <p class="info__text">
+          Sur rendez-vous, par téléphone{links.bookingIsExternal ? ', en ligne' : ''} ou via notre formulaire.
+        </p>
+        <a class="link-arrow" href={links.booking} {...(links.bookingIsExternal ? { target: '_blank', rel: 'noopener' } : {})}>
+          Prendre rendez-vous <Icon name="arrow" class="info__arrow" />
+        </a>
+      </article>
+    </div>
+
+    {site.socials.length > 0 && (
+      <ul class="infos__socials" aria-label="Réseaux sociaux">
+        {site.socials.map((social) => (
+          <li>
+            <a href={social.url} target="_blank" rel="noopener me">
+              {social.label}
+              <span class="visually-hidden">(nouvel onglet)</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>
+
+<style>
+  .infos {
+    background: var(--sand);
+  }
+
+  .infos__grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: clamp(1.6rem, 1.2rem + 1.2vw, 2.2rem);
+    border-radius: var(--radius-lg);
+    background: var(--ivory);
+  }
+
+  .info__icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    color: var(--rose-ink);
+  }
+
+  .info__icon :global(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .info__title {
+    margin-top: 0.4rem;
+    font-size: var(--step-2);
+  }
+
+  .info__text {
+    font-style: normal;
+    color: var(--ink);
+  }
+
+  .info__phone {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .info__phone:hover {
+    color: var(--bordeaux);
+  }
+
+  .info__note {
+    font-size: var(--step--1);
+    color: var(--taupe-ink);
+  }
+
+  .info__hours {
+    display: grid;
+    gap: 0.3rem;
+    width: 100%;
+    margin: 0;
+  }
+
+  .info__hours > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px dotted var(--line-strong);
+  }
+
+  .info__hours dt {
+    font-weight: 500;
+  }
+
+  .info__hours dd {
+    margin: 0;
+    color: var(--taupe-ink);
+    text-align: right;
+  }
+
+  .info .link-arrow {
+    margin-top: auto;
+  }
+
+  .info :global(.info__arrow) {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .infos__socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 700px) {
+    .infos__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .infos__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,263 @@
+---
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import babyBoomer from '../assets/photos/ongles-baby-boomer.jpg';
+import bleuCiel from '../assets/photos/ongles-bleu-ciel.jpg';
+import detailBabyBoomer from '../assets/photos/detail-baby-boomer.jpg';
+import detailBleuCiel from '../assets/photos/detail-bleu-ciel.jpg';
+import murDeVernis from '../assets/photos/detail-mur-de-vernis.jpg';
+import comptoir from '../assets/photos/detail-comptoir-fleurs.jpg';
+
+interface Tile {
+  image: ImageMetadata;
+  alt: string;
+  title: string;
+  detail: string;
+  shape: 'tall' | 'portrait' | 'square' | 'landscape' | 'wide';
+}
+
+// Trois colonnes équilibrées sur grand écran ; carrousel horizontal sur mobile.
+const columns: Tile[][] = [
+  [
+    {
+      image: babyBoomer,
+      alt: 'Deux mains croisées aux ongles amande en dégradé baby boomer, bagues dorées',
+      title: 'Baby boomer',
+      detail: 'Nude rosé & blanc lacté',
+      shape: 'tall',
+    },
+    {
+      image: comptoir,
+      alt: 'Comptoir de l’institut fleuri de roses blanches et d’hortensias bordeaux, flûtes alignées',
+      title: 'L’accueil',
+      detail: 'Fleurs fraîches au comptoir',
+      shape: 'wide',
+    },
+  ],
+  [
+    {
+      image: detailBleuCiel,
+      alt: 'Gros plan sur des ongles amande vernis d’un bleu ciel pastel',
+      title: 'Bleu ciel',
+      detail: 'Pastel lumineux, forme amande',
+      shape: 'square',
+    },
+    {
+      image: murDeVernis,
+      alt: 'Mur signé Maison Malki avec trois étagères lumineuses de flacons de vernis',
+      title: 'Le mur de couleurs',
+      detail: 'Un large choix de teintes',
+      shape: 'square',
+    },
+  ],
+  [
+    {
+      image: bleuCiel,
+      alt: 'Main aux ongles bleu ciel pastel posée sur un tissu à motifs, bague pavée de diamants',
+      title: 'Pose couleur',
+      detail: 'Fini brillant et uniforme',
+      shape: 'portrait',
+    },
+    {
+      image: detailBabyBoomer,
+      alt: 'Détail d’ongles amande en dégradé du rose nude au blanc',
+      title: 'Le détail',
+      detail: 'Dégradé tout en transparence',
+      shape: 'landscape',
+    },
+  ],
+];
+---
+
+<section class="gallery section" id="realisations" aria-labelledby="realisations-title">
+  <div class="container">
+    <header class="gallery__head">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal>Réalisations</p>
+        <h2 id="realisations-title" class="section-title" data-reveal data-delay="1">
+          L’art du détail, <em>au bout des doigts</em>
+        </h2>
+      </div>
+      <p class="gallery__intro" data-reveal data-delay="2">
+        Dégradés tout en transparence, pastels lumineux, formes amande parfaitement dessinées&nbsp;: un aperçu
+        du travail réalisé à l’institut.
+      </p>
+    </header>
+
+    <div class="gallery__grid" role="region" tabindex="0" aria-label="Galerie des réalisations">
+      {columns.map((column, c) => (
+        <div class="gallery__col">
+          {column.map((tile, t) => (
+            <figure class={`tile tile--${tile.shape}`} data-reveal data-delay={String(c + t)}>
+              <div class="tile__media media">
+                <Picture
+                  src={tile.image}
+                  alt={tile.alt}
+                  widths={[320, 480, 720]}
+                  sizes="(min-width: 760px) 31vw, 78vw"
+                  formats={['avif', 'webp']}
+                  quality={78}
+                />
+              </div>
+              <figcaption>
+                <span class="tile__title">{tile.title}</span>
+                <span class="tile__detail">{tile.detail}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      ))}
+    </div>
+    <p class="gallery__hint" aria-hidden="true">Faites défiler →</p>
+  </div>
+</section>
+
+<style>
+  .gallery {
+    background: var(--powder);
+    background-image: linear-gradient(180deg, var(--powder) 0%, #f7ebe6 100%);
+  }
+
+  .gallery__head {
+    display: grid;
+    gap: 1.5rem;
+    align-items: end;
+  }
+
+  .gallery__intro {
+    max-width: 26rem;
+    color: var(--taupe-ink);
+  }
+
+  /* Mobile : carrousel horizontal avec aimantation */
+  .gallery__grid {
+    display: flex;
+    gap: 1rem;
+    margin: clamp(2.5rem, 2rem + 3vw, 4.5rem) calc(-1 * var(--gutter)) 0;
+    padding: 0 var(--gutter) 0.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .gallery__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery__col {
+    display: contents;
+  }
+
+  .tile {
+    flex: 0 0 min(78vw, 22rem);
+    margin: 0;
+    scroll-snap-align: start;
+  }
+
+  .tile__media {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius);
+  }
+
+  .tile__media :global(img) {
+    transition: transform 1.4s var(--ease-out);
+  }
+
+  .tile:hover .tile__media :global(img) {
+    transform: scale(1.035);
+  }
+
+  .tile figcaption {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-top: 0.85rem;
+  }
+
+  .tile__title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-style: italic;
+  }
+
+  .tile__detail {
+    font-size: var(--step--2);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--taupe-ink);
+    text-align: right;
+  }
+
+  .gallery__hint {
+    margin-top: 1.2rem;
+    font-size: var(--step--2);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--taupe-ink);
+  }
+
+  /* Tablette & ordinateur : mosaïque éditoriale en trois colonnes */
+  @media (min-width: 760px) {
+    .gallery__head {
+      grid-template-columns: 1fr auto;
+    }
+
+    .gallery__grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(1rem, 0.5rem + 1.5vw, 2rem);
+      margin-inline: 0;
+      padding: 0;
+      overflow: visible;
+    }
+
+    .gallery__col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+    }
+
+    .gallery__col:nth-child(2) {
+      padding-top: clamp(2rem, 1rem + 4vw, 5rem);
+    }
+
+    .tile {
+      flex: none;
+    }
+
+    .tile--tall .tile__media {
+      aspect-ratio: 3 / 4.6;
+    }
+
+    .tile--portrait .tile__media {
+      aspect-ratio: 3 / 4;
+    }
+
+    .tile--square .tile__media {
+      aspect-ratio: 1 / 1.04;
+    }
+
+    .tile--landscape .tile__media {
+      aspect-ratio: 4 / 3;
+    }
+
+    .tile--wide .tile__media {
+      aspect-ratio: 16 / 10;
+    }
+
+    .tile--tall .tile__media :global(img) {
+      object-position: 50% 60%;
+    }
+
+    .tile--portrait .tile__media :global(img) {
+      object-position: 50% 30%;
+    }
+
+    .gallery__hint {
+      display: none;
+    }
+  }
+</style>

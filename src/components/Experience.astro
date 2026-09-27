@@ -1,0 +1,289 @@
+---
+import Icon from './Icon.astro';
+import { site, links } from '../config/site';
+
+const pillars = [
+  {
+    title: 'Douceur',
+    text: 'Des gestes délicats et maîtrisés, du travail des cuticules à l’électrolyse. La douceur est l’un des mots qui reviennent le plus dans les avis de nos clientes.',
+  },
+  {
+    title: 'Attention',
+    text: 'Une équipe décrite comme attentionnée et adorable, à l’écoute de vos envies pour un résultat qui vous ressemble.',
+  },
+  {
+    title: 'Un lieu cosy',
+    text: 'Un institut lumineux et fleuri, pensé comme une parenthèse de calme au cœur de Neuilly-sur-Seine.',
+  },
+];
+---
+
+<section class="experience section" id="experience" aria-labelledby="experience-title">
+  <div class="container experience__grid">
+    <div class="experience__content">
+      <p class="eyebrow" data-reveal>L’expérience Maison Malki</p>
+      <h2 id="experience-title" class="section-title" data-reveal data-delay="1">
+        Un moment pour soi, <em>entre de bonnes mains</em>
+      </h2>
+      <p class="lead experience__lead" data-reveal data-delay="2">
+        Ce que nos clientes retiennent de leur passage tient en quelques mots simples&nbsp;: de la douceur, de
+        l’attention, et un lieu où l’on se sent bien.
+      </p>
+
+      <ol class="pillars">
+        {pillars.map((pillar, i) => (
+          <li class="pillar" data-reveal data-delay={String(i + 1)}>
+            <span class="pillar__index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="pillar__title">{pillar.title}</h3>
+            <p class="pillar__text">{pillar.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <aside class="rating" aria-label="Avis Google" data-reveal="scale" data-delay="1">
+      <p class="rating__score">
+        <span class="rating__value">{site.googleRating.display}</span>
+        <span class="rating__max">/5</span>
+      </p>
+      <p class="rating__stars" aria-hidden="true">
+        {Array.from({ length: 5 }).map(() => <Icon name="star" />)}
+      </p>
+      <p class="rating__count">
+        Note moyenne sur Google<br />
+        <strong>{site.googleRating.count} avis</strong>
+      </p>
+
+      <div class="rating__themes">
+        <p class="rating__label">Les thèmes les plus cités</p>
+        <ul>
+          {site.reviewThemes.map((theme) => (
+            <li>
+              {theme.label}
+              <span class="rating__mentions">
+                {theme.count}<span class="visually-hidden"> mentions</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <a class="rating__link" href={links.googleMaps} target="_blank" rel="noopener">
+        Lire les avis sur Google
+        <Icon name="arrow-up-right" />
+        <span class="visually-hidden">(nouvel onglet)</span>
+      </a>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .experience {
+    position: relative;
+    background: var(--cocoa);
+    background-image:
+      radial-gradient(90% 70% at 100% 0%, rgb(107 45 56 / 0.45) 0%, transparent 60%),
+      radial-gradient(70% 60% at 0% 100%, rgb(178 123 116 / 0.18) 0%, transparent 60%);
+    color: var(--ivory);
+    overflow: hidden;
+  }
+
+  .experience .eyebrow {
+    color: var(--blush);
+  }
+
+  .experience :global(h2 em) {
+    color: var(--blush);
+  }
+
+  .experience__grid {
+    display: grid;
+    gap: clamp(3.5rem, 2rem + 4vw, 6rem);
+    align-items: start;
+  }
+
+  .experience__lead {
+    margin-top: 1.8rem;
+    max-width: 36rem;
+    color: rgb(255 252 248 / 0.78);
+  }
+
+  .pillars {
+    display: grid;
+    gap: 0;
+    margin: clamp(2.5rem, 2rem + 2vw, 3.5rem) 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgb(255 252 248 / 0.16);
+  }
+
+  .pillar {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    gap: 0.3rem 1rem;
+    padding: 1.6rem 0;
+    border-bottom: 1px solid rgb(255 252 248 / 0.16);
+  }
+
+  .pillar__index {
+    grid-row: span 2;
+    padding-top: 0.35rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--blush);
+  }
+
+  .pillar__title {
+    font-size: var(--step-2);
+  }
+
+  .pillar__text {
+    color: rgb(255 252 248 / 0.74);
+    max-width: 34rem;
+  }
+
+  /* Carte de note Google */
+  .rating {
+    position: relative;
+    padding: clamp(2rem, 1.5rem + 2vw, 3rem);
+    border: 1px solid rgb(255 252 248 / 0.16);
+    border-radius: 999px 999px var(--radius-lg) var(--radius-lg);
+    background: rgb(255 252 248 / 0.04);
+    text-align: center;
+  }
+
+  .rating__score {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.2rem;
+    margin-top: clamp(1.5rem, 1rem + 2vw, 3rem);
+    font-family: var(--font-display);
+    font-weight: 300;
+    line-height: 0.9;
+  }
+
+  .rating__value {
+    font-size: clamp(5rem, 3.5rem + 7vw, 8.5rem);
+  }
+
+  .rating__max {
+    font-size: var(--step-2);
+    color: rgb(255 252 248 / 0.66);
+  }
+
+  .rating__stars {
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-top: 1.2rem;
+    color: var(--gold);
+  }
+
+  .rating__stars :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .rating__count {
+    margin-top: 1rem;
+    font-size: var(--step--1);
+    color: rgb(255 252 248 / 0.74);
+  }
+
+  .rating__count strong {
+    font-weight: 500;
+    color: var(--ivory);
+  }
+
+  .rating__themes {
+    margin-top: 2rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid rgb(255 252 248 / 0.14);
+  }
+
+  .rating__label {
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--blush);
+  }
+
+  .rating__themes ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.55rem;
+    margin: 1.1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .rating__themes li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.55rem 0.45rem 0.95rem;
+    border: 1px solid rgb(255 252 248 / 0.2);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-style: italic;
+    line-height: 1.2;
+  }
+
+  .rating__mentions {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.7rem;
+    height: 1.7rem;
+    padding: 0 0.4rem;
+    border-radius: 999px;
+    background: rgb(255 252 248 / 0.1);
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-style: normal;
+    color: var(--blush);
+  }
+
+  .rating__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 2rem;
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--ivory);
+    text-decoration: none;
+    border-bottom: 1px solid rgb(255 252 248 / 0.4);
+    padding-bottom: 0.2rem;
+    transition: border-color 0.4s var(--ease);
+  }
+
+  .rating__link :global(svg) {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .rating__link:hover {
+    border-color: var(--ivory);
+  }
+
+  .experience :global(:focus-visible) {
+    outline-color: var(--blush);
+  }
+
+  @media (min-width: 1000px) {
+    .experience__grid {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      align-items: center;
+    }
+
+    .pillars {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

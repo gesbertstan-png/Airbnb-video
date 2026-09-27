@@ -1,0 +1,74 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { site, links } from '../config/site';
+---
+
+<LegalLayout
+  title="Conditions générales d’utilisation — Maison Malki Neuilly"
+  description="Conditions générales d’utilisation du site de Maison Malki Neuilly, institut de beauté et salon d’ongles à Neuilly-sur-Seine."
+  heading="Conditions générales d’utilisation"
+>
+  <h2>1. Objet</h2>
+  <p>
+    Les présentes conditions générales d’utilisation (CGU) encadrent l’accès et l’utilisation du site
+    internet de {site.name}. En naviguant sur le site, vous acceptez ces conditions sans réserve.
+  </p>
+
+  <h2>2. Éditeur</h2>
+  <p>
+    Le site est édité par {site.name}, {links.fullAddress}. Les informations complètes figurent dans les
+    <a href="/mentions-legales">mentions légales</a>.
+  </p>
+
+  <h2>3. Accès au site</h2>
+  <p>
+    Le site est accessible gratuitement, à tout moment, sauf interruption pour maintenance ou cas de force
+    majeure. {site.name} ne peut être tenu responsable d’une indisponibilité temporaire du site.
+  </p>
+
+  <h2>4. Informations présentées</h2>
+  <p>
+    Les prestations et visuels présentés sur le site le sont à titre informatif. Les tarifs, durées et
+    disponibilités vous sont communiqués par l’institut lors de votre prise de rendez-vous. {site.name}
+    s’efforce de fournir des informations exactes et à jour, sans pouvoir garantir l’absence totale
+    d’erreur.
+  </p>
+
+  <h2>5. Demandes de rendez-vous</h2>
+  <p>
+    Le formulaire du site permet d’envoyer une demande de rendez-vous. L’envoi d’une demande ne vaut pas
+    réservation&nbsp;: votre rendez-vous est confirmé uniquement après échange avec l’institut, par téléphone ou
+    par e-mail. Aucun paiement n’est effectué sur le site. Vous vous engagez à fournir des informations
+    exactes et à ne pas utiliser le formulaire à des fins abusives.
+  </p>
+
+  <h2>6. Propriété intellectuelle</h2>
+  <p>
+    Les contenus du site (textes, photographies, visuels, logo, mise en page) sont protégés. Toute
+    reproduction ou réutilisation sans autorisation écrite préalable de {site.name} est interdite.
+  </p>
+
+  <h2>7. Liens externes</h2>
+  <p>
+    Le site peut contenir des liens vers des services tiers (par exemple Google Maps). {site.name} n’exerce
+    aucun contrôle sur ces services et décline toute responsabilité quant à leur contenu.
+  </p>
+
+  <h2>8. Données personnelles</h2>
+  <p>
+    Le traitement de vos données personnelles et l’usage des cookies sont décrits dans la
+    <a href="/politique-de-confidentialite">politique de confidentialité</a>.
+  </p>
+
+  <h2>9. Droit applicable</h2>
+  <p>
+    Les présentes CGU sont soumises au droit français. En cas de litige, une solution amiable sera
+    recherchée en priorité&nbsp;; à défaut, les tribunaux français compétents seront saisis.
+  </p>
+
+  <h2>10. Contact</h2>
+  <p>
+    Pour toute question relative au site : <a href={site.phone.href}>{site.phone.display}</a> ou par courrier
+    au {links.fullAddress}.
+  </p>
+</LegalLayout>

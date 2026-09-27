@@ -1,0 +1,298 @@
+---
+import { Picture } from 'astro:assets';
+import BookingButton from './BookingButton.astro';
+import { services } from '../data/services';
+import { site } from '../config/site';
+
+const hasPrices = services.some((s) => s.price);
+---
+
+<section class="services section" id="prestations" aria-labelledby="prestations-title">
+  <div class="container">
+    <header class="services__head section-head">
+      <p class="eyebrow" data-reveal>Prestations</p>
+      <h2 id="prestations-title" class="section-title" data-reveal data-delay="1">
+        Des soins précis, <em>des gestes délicats</em>
+      </h2>
+      <p data-reveal data-delay="2">
+        Pour les mains comme pour l’épilation, chaque prestation est réalisée avec la même exigence&nbsp;:
+        le souci du détail, et beaucoup de douceur.
+      </p>
+    </header>
+
+    <div class="services__layout">
+      <div class="services__stage" aria-hidden="true">
+        <div class="services__frame">
+          {services.map((service, i) => (
+            <div class:list={['services__slide', 'media', i === 0 && 'is-active']} data-service-slide={service.id}>
+              <Picture
+                src={service.image}
+                alt=""
+                widths={[420, 640, 820]}
+                sizes="(min-width: 1000px) 34vw, 1px"
+                formats={['avif', 'webp']}
+                quality={78}
+                class={`focus-${service.id}`}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <ol class="services__list">
+        {services.map((service, i) => (
+          <li class:list={['service', i === 0 && 'is-active']} data-service={service.id} data-reveal>
+            <div class="service__thumb media">
+              <Picture
+                src={service.image}
+                alt={service.imageAlt}
+                widths={[160, 240]}
+                sizes="(min-width: 1000px) 1px, 96px"
+                formats={['avif', 'webp']}
+                quality={75}
+                class={`focus-${service.id}`}
+              />
+            </div>
+            <div class="service__body">
+              <p class="service__meta">
+                <span class="service__index">{String(i + 1).padStart(2, '0')}</span>
+                <span class="service__category">{service.category}</span>
+              </p>
+              <h3 class="service__title">
+                {service.title}
+                {service.price && <span class="service__price">{service.price}</span>}
+              </h3>
+              <p class="service__text">{service.description}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <div class="services__footer" data-reveal>
+      <p>
+        {hasPrices
+          ? 'Durées et détails de chaque prestation communiqués lors de votre prise de rendez-vous.'
+          : 'Tarifs et durées communiqués lors de votre prise de rendez-vous'}
+        {!hasPrices && (
+          <>
+            {' '}— par téléphone au <a href={site.phone.href}>{site.phone.display}</a>.
+          </>
+        )}
+      </p>
+      <BookingButton location="services" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .services {
+    background: var(--cream);
+  }
+
+  .services__layout {
+    display: grid;
+    gap: 3rem;
+    margin-top: clamp(3rem, 2rem + 3vw, 5rem);
+  }
+
+  .services__stage {
+    display: none;
+  }
+
+  .services__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .service {
+    display: grid;
+    grid-template-columns: 5.25rem minmax(0, 1fr);
+    gap: 1.25rem;
+    padding: 1.8rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .service__thumb {
+    width: 5.25rem;
+    aspect-ratio: 4 / 5;
+    border-radius: 999px 999px 8px 8px;
+  }
+
+  .service__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 0.55rem;
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--taupe-ink);
+  }
+
+  .service__index {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-style: italic;
+    letter-spacing: 0;
+    color: var(--rose-ink);
+  }
+
+  .service__title {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    font-size: var(--step-3);
+  }
+
+  .service__price {
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    font-weight: 400;
+    color: var(--taupe-ink);
+  }
+
+  .service__text {
+    margin-top: 0.8rem;
+    max-width: 36rem;
+    color: var(--taupe-ink);
+  }
+
+  .services__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6rem;
+    margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+    padding: clamp(1.6rem, 1.2rem + 1.5vw, 2.4rem);
+    border-radius: var(--radius-lg);
+    background: var(--powder);
+  }
+
+  .services__footer p {
+    max-width: 34rem;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .services__footer a:not(.btn) {
+    font-style: normal;
+    white-space: nowrap;
+  }
+
+  /* Points focaux des images */
+  :global(.focus-manucure-russe) {
+    object-position: 55% 28%;
+  }
+
+  :global(.focus-baby-boomer) {
+    object-position: 40% 50%;
+  }
+
+  :global(.focus-pose-couleur) {
+    object-position: 50% 62%;
+  }
+
+  :global(.focus-electrolyse) {
+    object-position: 32% 50%;
+  }
+
+  @media (min-width: 1000px) {
+    .services__layout {
+      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
+      gap: clamp(3rem, 6vw, 7rem);
+      align-items: start;
+    }
+
+    .services__stage {
+      display: block;
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+    }
+
+    .services__frame {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      border-radius: 999px 999px var(--radius-lg) var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      background: var(--sand);
+    }
+
+    .services__slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.04);
+      transition:
+        opacity 0.9s var(--ease),
+        transform 1.4s var(--ease-out);
+    }
+
+    .services__slide.is-active {
+      opacity: 1;
+      transform: none;
+    }
+
+    .service {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 2.4rem 0 2.4rem 0;
+      transition: padding 0.6s var(--ease);
+    }
+
+    .service__thumb {
+      display: none;
+    }
+
+    .service__title {
+      transition: color 0.5s var(--ease);
+    }
+
+    .service:not(.is-active) .service__title {
+      color: var(--taupe-ink);
+    }
+
+    .service.is-active {
+      padding-left: 1.2rem;
+    }
+
+    .services__footer {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+</style>
+
+<script>
+  // Sur grand écran : l'image de la prestation « active » s'affiche dans le cadre fixe.
+  const items = [...document.querySelectorAll<HTMLElement>('[data-service]')];
+  const slides = [...document.querySelectorAll<HTMLElement>('[data-service-slide]')];
+
+  function activate(id: string) {
+    items.forEach((el) => el.classList.toggle('is-active', el.dataset.service === id));
+    slides.forEach((el) => el.classList.toggle('is-active', el.dataset.serviceSlide === id));
+  }
+
+  if (items.length && slides.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) activate((entry.target as HTMLElement).dataset.service!);
+        });
+      },
+      { rootMargin: '-45% 0px -45% 0px' },
+    );
+    items.forEach((item) => {
+      observer.observe(item);
+      item.addEventListener('mouseenter', () => activate(item.dataset.service!));
+    });
+  }
+</script>

@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LocalBusinessSchema from '../components/LocalBusinessSchema.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Services from '../components/Services.astro';
+import Gallery from '../components/Gallery.astro';
+import Experience from '../components/Experience.astro';
+import Booking from '../components/Booking.astro';
+import PracticalInfo from '../components/PracticalInfo.astro';
+---
+
+<BaseLayout
+  title="Maison Malki Neuilly — Institut de beauté & salon d’ongles à Neuilly-sur-Seine"
+  description="Maison Malki Neuilly, institut de beauté et salon d’ongles au 25 rue de Chartres à Neuilly-sur-Seine : manucure russe, baby boomer, pose couleur et électrolyse. Prenez rendez-vous."
+  stickyCta
+>
+  <LocalBusinessSchema slot="head" />
+  <Hero />
+  <About />
+  <Services />
+  <Gallery />
+  <Experience />
+  <Booking />
+  <PracticalInfo />
+</BaseLayout>

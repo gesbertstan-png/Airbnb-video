@@ -1,0 +1,53 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import LegalValue from '../components/LegalValue.astro';
+import { site, links } from '../config/site';
+
+const { legal } = site;
+---
+
+<LegalLayout
+  title="Mentions légales — Maison Malki Neuilly"
+  description="Mentions légales du site de Maison Malki Neuilly, institut de beauté et salon d’ongles au 25 rue de Chartres, Neuilly-sur-Seine."
+  heading="Mentions légales"
+>
+  <h2>Éditeur du site</h2>
+  <dl>
+    <div><dt>Nom commercial</dt><dd>{site.name}</dd></div>
+    <div><dt>Raison sociale</dt><dd><LegalValue value={legal.companyName} /></dd></div>
+    <div><dt>Forme juridique</dt><dd><LegalValue value={legal.legalForm} /></dd></div>
+    <div><dt>Capital social</dt><dd><LegalValue value={legal.shareCapital} /></dd></div>
+    <div><dt>Adresse</dt><dd>{links.fullAddress}</dd></div>
+    <div><dt>Téléphone</dt><dd><a href={site.phone.href}>{site.phone.display}</a></dd></div>
+    <div><dt>E-mail</dt><dd><LegalValue value={legal.contactEmail} /></dd></div>
+    <div><dt>SIRET</dt><dd><LegalValue value={legal.siret} /></dd></div>
+    <div><dt>RCS</dt><dd><LegalValue value={legal.rcs} /></dd></div>
+    <div><dt>TVA intracommunautaire</dt><dd><LegalValue value={legal.vatNumber} /></dd></div>
+    <div><dt>Directeur de la publication</dt><dd><LegalValue value={legal.publicationDirector} /></dd></div>
+  </dl>
+
+  <h2>Hébergement</h2>
+  <dl>
+    <div><dt>Hébergeur</dt><dd><LegalValue value={legal.host.name} /></dd></div>
+    <div><dt>Adresse</dt><dd><LegalValue value={legal.host.address} /></dd></div>
+    <div><dt>Téléphone</dt><dd><LegalValue value={legal.host.phone} /></dd></div>
+  </dl>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>
+    L’ensemble des contenus de ce site (textes, photographies, visuels, logo, mise en page) est la propriété
+    de {site.name} ou de ses partenaires et est protégé par le droit de la propriété intellectuelle. Toute
+    reproduction, représentation ou diffusion, totale ou partielle, sans autorisation écrite préalable est
+    interdite.
+  </p>
+
+  <h2>Crédits</h2>
+  <p>Photographies : {site.name}. Typographies : Cormorant Garamond et Jost (licence SIL Open Font).</p>
+
+  <h2>Données personnelles et cookies</h2>
+  <p>
+    Les informations relatives au traitement de vos données personnelles et à l’utilisation des cookies
+    sont détaillées dans notre <a href="/politique-de-confidentialite">politique de confidentialité</a>.
+    L’utilisation du site est régie par les <a href="/cgu">conditions générales d’utilisation</a>.
+  </p>
+</LegalLayout>

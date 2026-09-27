@@ -1,0 +1,147 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { site } from '../config/site';
+
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+}
+
+const { title, description, heading } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="legal">
+    <header class="legal__head container">
+      <nav class="legal__breadcrumb" aria-label="Fil d’Ariane">
+        <a href="/">Accueil</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{heading}</span>
+      </nav>
+      <h1>{heading}</h1>
+      <p class="legal__updated">Dernière mise à jour : {site.legal.lastUpdate}</p>
+    </header>
+    <div class="legal__body container">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: calc(var(--header-h) + clamp(3rem, 2rem + 4vw, 6rem)) 0 var(--section);
+    background: var(--cream);
+    background-image: radial-gradient(60% 40% at 100% 0%, var(--powder) 0%, transparent 70%);
+  }
+
+  .legal__head,
+  .legal__body {
+    max-width: 46rem;
+  }
+
+  .legal__breadcrumb {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1.6rem;
+    font-size: var(--step--1);
+    color: var(--taupe-ink);
+  }
+
+  .legal__breadcrumb a {
+    color: var(--taupe-ink);
+  }
+
+  .legal h1 {
+    font-size: var(--step-4);
+  }
+
+  .legal__updated {
+    margin-top: 1rem;
+    font-size: var(--step--1);
+    color: var(--taupe-ink);
+  }
+
+  .legal__body {
+    margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+
+  .legal__body :global(h2) {
+    margin: 2.8rem 0 1rem;
+    font-size: var(--step-2);
+  }
+
+  .legal__body :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .legal__body :global(h3) {
+    margin: 1.8rem 0 0.6rem;
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    font-weight: 500;
+  }
+
+  .legal__body :global(p),
+  .legal__body :global(ul) {
+    margin: 0 0 1rem;
+    color: var(--taupe-ink);
+  }
+
+  .legal__body :global(ul) {
+    padding-left: 1.2rem;
+  }
+
+  .legal__body :global(li) {
+    margin-bottom: 0.4rem;
+  }
+
+  .legal__body :global(strong) {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .legal__body :global(a) {
+    color: var(--bordeaux);
+  }
+
+  .legal__body :global(dl) {
+    display: grid;
+    margin: 0 0 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .legal__body :global(dl > div) {
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .legal__body :global(dt) {
+    font-size: var(--step--2);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--rose-ink);
+  }
+
+  .legal__body :global(dd) {
+    margin: 0;
+  }
+
+  .legal__body :global(.to-complete) {
+    padding: 0.05rem 0.45rem;
+    border-radius: 4px;
+    background: #fbeeed;
+    color: #862a33;
+    font-size: 0.92em;
+  }
+
+  @media (min-width: 640px) {
+    .legal__body :global(dl > div) {
+      grid-template-columns: 14rem 1fr;
+      gap: 1rem;
+    }
+  }
+</style>

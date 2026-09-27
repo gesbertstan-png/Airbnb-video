@@ -1,0 +1,72 @@
+---
+/**
+ * Page de retour du formulaire lorsque JavaScript est désactivé.
+ * Le statut est lu dans l'URL côté navigateur : la page reste statique.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout
+  title="Demande de rendez-vous — Maison Malki Neuilly"
+  description="Suivi de votre demande de rendez-vous auprès de Maison Malki Neuilly."
+  noindex
+>
+  <section class="sent">
+    <div class="container sent__inner">
+      <div data-state="success">
+        <p class="eyebrow">Rendez-vous</p>
+        <h1>Merci, <em>à très bientôt</em></h1>
+        <p class="lead">
+          Votre demande a bien été envoyée. Nous vous recontactons très vite pour confirmer votre rendez-vous.
+        </p>
+      </div>
+      <div data-state="error" hidden>
+        <p class="eyebrow">Rendez-vous</p>
+        <h1>Votre demande <em>n’a pas pu être envoyée</em></h1>
+        <p class="lead">
+          Merci de réessayer depuis la page d’accueil, ou d’appeler directement l’institut au
+          <a href={site.phone.href}>{site.phone.display}</a>.
+        </p>
+      </div>
+      <a class="btn" href="/">Retour à l’accueil</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  if (new URLSearchParams(location.search).get('statut') === 'erreur') {
+    document.querySelector<HTMLElement>('[data-state="success"]')!.hidden = true;
+    document.querySelector<HTMLElement>('[data-state="error"]')!.hidden = false;
+  }
+</script>
+
+<style>
+  .sent {
+    min-height: 80svh;
+    display: flex;
+    align-items: center;
+    padding: calc(var(--header-h) + 3rem) 0 5rem;
+    background: radial-gradient(60% 50% at 50% 0%, var(--powder) 0%, transparent 70%), var(--cream);
+    text-align: center;
+  }
+
+  .sent__inner {
+    display: grid;
+    justify-items: center;
+    gap: 2.4rem;
+    max-width: 40rem;
+  }
+
+  .sent h1 {
+    font-size: var(--step-4);
+  }
+
+  .sent .lead {
+    margin-top: 1.4rem;
+  }
+
+  .sent .eyebrow::before {
+    display: none;
+  }
+</style>

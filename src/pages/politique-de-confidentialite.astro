@@ -1,0 +1,123 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import LegalValue from '../components/LegalValue.astro';
+import { site, links } from '../config/site';
+---
+
+<LegalLayout
+  title="Politique de confidentialité (RGPD) — Maison Malki Neuilly"
+  description="Comment Maison Malki Neuilly collecte, utilise et protège vos données personnelles, et comment exercer vos droits (RGPD)."
+  heading="Politique de confidentialité"
+>
+  <p>
+    {site.name} attache une grande importance à la protection de vos données personnelles. Cette page
+    explique quelles données sont collectées sur ce site, pourquoi, pendant combien de temps, et comment
+    exercer vos droits, conformément au Règlement général sur la protection des données (RGPD) et à la loi
+    Informatique et Libertés.
+  </p>
+
+  <h2>1. Responsable du traitement</h2>
+  <p>
+    <strong>{site.name}</strong> (<LegalValue value={site.legal.companyName} />), {links.fullAddress}.<br />
+    Contact : <LegalValue value={site.legal.contactEmail} /> — téléphone : <a href={site.phone.href}>{site.phone.display}</a>.
+  </p>
+
+  <h2>2. Données collectées</h2>
+  <h3>Formulaire de demande de rendez-vous</h3>
+  <p>
+    Nom et prénom, numéro de téléphone, adresse e-mail (facultative), prestation souhaitée, disponibilités
+    et message (facultatifs). Seules les données nécessaires au traitement de votre demande sont
+    obligatoires.
+  </p>
+  <h3>Données techniques</h3>
+  <p>
+    Pour protéger le formulaire contre les envois abusifs, votre adresse IP est utilisée de manière
+    temporaire (en mémoire, 15 minutes au plus) afin de limiter le nombre de demandes. Elle n’est pas
+    enregistrée dans une base de données. L’hébergeur du site peut par ailleurs conserver des journaux
+    techniques de connexion pour des raisons de sécurité.
+  </p>
+  <h3>Mesure d’audience</h3>
+  <p>
+    Uniquement si vous l’acceptez, des cookies de mesure d’audience permettent d’établir des statistiques
+    de fréquentation anonymisées (voir la section Cookies ci-dessous).
+  </p>
+
+  <h2>3. Finalités et bases légales</h2>
+  <ul>
+    <li>
+      <strong>Traiter votre demande de rendez-vous</strong> et vous recontacter&nbsp;: sur la base de votre
+      consentement et de mesures précontractuelles prises à votre demande (article 6.1 a et b du RGPD).
+    </li>
+    <li>
+      <strong>Sécuriser le site et lutter contre le spam</strong> : intérêt légitime de {site.name}
+      (article 6.1 f du RGPD).
+    </li>
+    <li>
+      <strong>Mesurer l’audience du site</strong> : uniquement avec votre consentement (article 6.1 a du
+      RGPD et article 82 de la loi Informatique et Libertés).
+    </li>
+  </ul>
+
+  <h2>4. Destinataires</h2>
+  <p>
+    Vos données sont destinées exclusivement au personnel habilité de {site.name}. Elles peuvent être
+    traitées, pour notre compte et selon nos instructions, par nos prestataires techniques (hébergement du
+    site, messagerie électronique). Si vous acceptez la mesure d’audience, certaines données de navigation
+    sont traitées par Google (Google Analytics), y compris hors de l’Union européenne, dans le cadre du
+    Data Privacy Framework UE–États-Unis. Vos données ne sont jamais vendues ni utilisées à des fins
+    publicitaires.
+  </p>
+
+  <h2>5. Durées de conservation</h2>
+  <ul>
+    <li>Demandes de rendez-vous&nbsp;: le temps nécessaire à leur traitement, puis au plus 3 ans après notre dernier échange.</li>
+    <li>Adresse IP utilisée contre le spam&nbsp;: 15 minutes au plus, en mémoire uniquement.</li>
+    <li>Cookies de mesure d’audience&nbsp;: 13 mois au plus.</li>
+    <li>Votre choix concernant les cookies&nbsp;: 6 mois, après quoi il vous est à nouveau demandé.</li>
+  </ul>
+
+  <h2>6. Vos droits</h2>
+  <p>
+    Vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation et d’opposition au
+    traitement de vos données, d’un droit à la portabilité, du droit de retirer votre consentement à tout
+    moment et de définir des directives relatives au sort de vos données après votre décès.
+  </p>
+  <p>
+    Pour exercer ces droits, contactez-nous par e-mail (<LegalValue value={site.legal.contactEmail} />) ou par
+    courrier à l’adresse de l’institut : {links.fullAddress}. Une réponse vous sera apportée dans un délai
+    d’un mois. Si vous estimez, après nous avoir contactés, que vos droits ne sont pas respectés, vous
+    pouvez adresser une réclamation à la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>).
+  </p>
+
+  <h2 id="cookies">7. Cookies et traceurs</h2>
+  <p>
+    Lors de votre première visite, si un outil de mesure d’audience est actif, une bannière vous permet
+    d’accepter ou de refuser les cookies, aussi simplement l’un que l’autre. Aucun cookie de mesure n’est
+    déposé avant votre accord. Vous pouvez modifier votre choix à tout moment grâce au lien
+    «&nbsp;Gestion des cookies&nbsp;» en bas de chaque page.
+  </p>
+  <ul>
+    <li>
+      <strong>mm-consent</strong> (stockage local, strictement nécessaire) : mémorise votre choix concernant
+      les cookies — 6 mois.
+    </li>
+    <li>
+      <strong>_ga, _ga_*</strong> (Google Analytics, soumis à consentement) : statistiques de fréquentation
+      — 13 mois au plus.
+    </li>
+  </ul>
+  <p>Le site n’utilise aucun cookie publicitaire ni de réseau social.</p>
+
+  <h2>8. Sécurité</h2>
+  <p>
+    Le site est accessible exclusivement en HTTPS (connexion chiffrée). Les données du formulaire sont
+    vérifiées puis transmises côté serveur&nbsp;; aucune clé d’accès ou information sensible n’est exposée dans
+    votre navigateur.
+  </p>
+
+  <h2>9. Modifications</h2>
+  <p>
+    Cette politique peut être mise à jour pour tenir compte des évolutions du site ou de la réglementation.
+    La date de dernière mise à jour figure en haut de cette page.
+  </p>
+</LegalLayout>
