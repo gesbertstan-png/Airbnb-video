@@ -1,16 +1,27 @@
 // @ts-check
 import { defineConfig, envField } from 'astro/config';
 import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 import { loadEnv } from 'vite';
 import { createHash } from 'node:crypto';
 import { JS_FLAG_SCRIPT } from './src/inline-scripts.mjs';
+import { SECURITY_HEADERS } from './security-headers.mjs';
+import { vercelSecurityHeaders } from './integrations/vercel-security-headers.mjs';
 
 const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
 
-// Adresse publique du site (utilisée pour les URL canoniques, le sitemap et les images de partage).
-// À définir dans la variable d'environnement SITE_URL avant la mise en ligne.
-const SITE_URL = env.SITE_URL || 'https://maison-malki-neuilly.example';
+// Hébergement : Vercel est détecté automatiquement pendant son build (variable VERCEL) ;
+// partout ailleurs, le site est construit pour un serveur Node (server.mjs).
+const onVercel = Boolean(env.VERCEL);
+
+// Adresse publique du site (URL canoniques, sitemap, images de partage) : SITE_URL si elle est définie,
+// sinon le domaine de production Vercel, sinon une adresse provisoire.
+const SITE_URL =
+  env.SITE_URL ||
+  (env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : 'https://maison-malki-neuilly.example');
 
 // Pages exclues du sitemap (pages techniques, non indexées).
 const NOINDEX_PATHS = ['/404', '/demande-envoyee'];
@@ -26,12 +37,13 @@ export default defineConfig({
   site: SITE_URL,
   trailingSlash: 'never',
   build: {
+    // Pages générées en fichiers .html (sur Vercel, l'adaptateur utilise des dossiers)
     format: 'file',
     // Petites feuilles de style intégrées, les autres servies en cache (compatible avec la CSP)
     inlineStylesheets: 'auto',
   },
   output: 'static',
-  adapter: node({ mode: 'standalone', staticHeaders: true }),
+  adapter: onVercel ? vercel({ staticHeaders: true }) : node({ mode: 'standalone', staticHeaders: true }),
   session: false,
   security: {
     // Politique de sécurité du contenu : Astro calcule les empreintes des scripts et styles intégrés.
@@ -57,6 +69,7 @@ export default defineConfig({
     sitemap({
       filter: (page) => !NOINDEX_PATHS.some((p) => new URL(page).pathname.startsWith(p)),
     }),
+    ...(onVercel ? [vercelSecurityHeaders(SECURITY_HEADERS)] : []),
   ],
   env: {
     schema: {

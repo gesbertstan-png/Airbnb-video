@@ -2,6 +2,7 @@
 node_modules/
 dist/
 .astro/
+.vercel/
 
 # Variables d'environnement (secrets)
 .env

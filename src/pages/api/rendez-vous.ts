@@ -17,7 +17,8 @@ type Outcome =
   | { ok: true }
   | { ok: false; status: number; message: string; errors?: Record<string, string> };
 
-export const POST: APIRoute = async ({ request, clientAddress, redirect }) => {
+export const POST: APIRoute = async (context) => {
+  const { request, redirect } = context;
   const wantsJson = (request.headers.get('accept') ?? '').includes('application/json');
 
   const respond = (outcome: Outcome) => {
@@ -32,11 +33,11 @@ export const POST: APIRoute = async ({ request, clientAddress, redirect }) => {
     });
   };
 
-  // 1. Limite d'envois par adresse IP
-  // (derrière un proxy, Astro utilise X-Forwarded-For si le domaine figure dans security.allowedDomains)
+  // 1. Limite d'envois par adresse IP.
+  // L'adresse est lue ici et non dans les paramètres : son accès lève une erreur si l'hébergeur ne la fournit pas.
   let ip = 'inconnue';
   try {
-    ip = clientAddress;
+    ip = context.clientAddress;
   } catch {
     /* adresse indisponible */
   }

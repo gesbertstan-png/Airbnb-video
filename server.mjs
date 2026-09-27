@@ -10,6 +10,7 @@
  */
 import http from 'node:http';
 import compression from 'compression';
+import { SECURITY_HEADERS, HSTS_HEADER } from './security-headers.mjs';
 
 process.env.ASTRO_NODE_AUTOSTART = 'disabled';
 const { handler } = await import('./dist/server/entry.mjs');
@@ -20,14 +21,6 @@ const FORCE_HTTPS = process.env.FORCE_HTTPS !== 'false';
 
 // Compression gzip / brotli des réponses texte (HTML, CSS, JS, SVG, XML…)
 const compress = compression({ threshold: 1024 });
-
-const SECURITY_HEADERS = {
-  'X-Content-Type-Options': 'nosniff',
-  'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'X-Frame-Options': 'SAMEORIGIN',
-  'Cross-Origin-Opener-Policy': 'same-origin',
-  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()',
-};
 
 const server = http.createServer((req, res) => {
   const proto = String(req.headers['x-forwarded-proto'] ?? '').split(',')[0].trim();
@@ -42,7 +35,7 @@ const server = http.createServer((req, res) => {
 
   for (const [name, value] of Object.entries(SECURITY_HEADERS)) res.setHeader(name, value);
   if (proto === 'https') {
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    res.setHeader('Strict-Transport-Security', HSTS_HEADER);
   }
 
   compress(req, res, () => handler(req, res));
