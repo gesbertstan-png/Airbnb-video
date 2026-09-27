@@ -58,10 +58,6 @@ export default defineConfig({
       filter: (page) => !NOINDEX_PATHS.some((p) => new URL(page).pathname.startsWith(p)),
     }),
   ],
-  prefetch: {
-    prefetchAll: false,
-    defaultStrategy: 'hover',
-  },
   env: {
     schema: {
       // Côté client (public) : identifiant Google Analytics 4, chargé uniquement après consentement.
